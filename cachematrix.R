@@ -1,15 +1,35 @@
-## Put comments here that give an overall description of what your
-## functions do
+## HW2 assigment, implementation of cache inversion matrix calculation
 
-## Write a short comment describing this function
+## Prepare a special object to be used by cacheSolve
+## Function return a list of 4 function: set, get, setinverse , getinverse
 
 makeCacheMatrix <- function(x = matrix()) {
+  inver <- NULL
+  set <- function(y) {
+    x <<- y
+    inver <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(inverse) inver <<- inverse
+  getinverse <- function() inver
+  list(set = set, get = get,
+       setinverse = setinverse,
+       getinverse = getinverse)
 
 }
 
 
-## Write a short comment describing this function
+##Function get a object build by makeCacheMatrix 
+##returned cached version of inversed matrix
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inver <- x$getinverse()
+  if(!is.null(inver)) {
+    message("getting inversed matrix from cache")
+    return(inver)
+  }
+  matrix <- x$get()
+  inver <- solve(matrix, ...)
+  x$setinverse(inver)
+  inver
 }
